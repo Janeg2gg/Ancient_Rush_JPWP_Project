@@ -2,7 +2,7 @@ package entieties;
 
 import Main.Game;
 import utilz.LoadSave;
-import static utilz.HelpMethods.CanMoveHere;
+import static utilz.HelpMethods.*;
 
 
 import java.awt.*;
@@ -14,12 +14,19 @@ public class Player extends Entity{
     private BufferedImage[][] animations;
     private int aniTick, aniIndex, aniSpeed = 15;
     private int playerAction = IDLE;
-    private boolean left, down, up, right;
+    private boolean left, down, up, right, jump;
     private boolean moving = false;
     private float playerSpeed = 2.0f;
     private int [][] lvlData;
     private float xDrawOffset = 2 * Game.SCALE;
     private float yDrawOffset = 8 * Game.SCALE;
+
+    //Gravity/Jumping-------------------------------
+    private float airSpeed = 0f;
+    private float gravity = 0.04f * Game.SCALE;
+    private float jumpSpeed = - 2.25f * Game.SCALE;
+    private float fallSpeedAfterColission = 0.5f * Game.SCALE;
+    private boolean InAir = false;
     public Player(float x, float y, int width, int height) {
         super(x, y, width, height);
         loadAnimations();
@@ -71,28 +78,58 @@ public class Player extends Entity{
 
         moving = false;
 
-        if(!left && !right && !up && !down)
+        if(up)
+            jump();
+        if(!left && !right && !InAir)
             return;
 
-        float xSpeed = 0, ySpeed = 0;
+        float xSpeed = 0;
 
-        if(left && !right)
-            xSpeed = -playerSpeed;
-        else if(right && !left)
-            xSpeed = playerSpeed;
+        if(left)
+            xSpeed -= playerSpeed;
+        if(right)
+            xSpeed += playerSpeed;
 
-        if(up && !down)
-            ySpeed = -playerSpeed;
-        else if(down && !up)
-            ySpeed = playerSpeed;
 
-        if(CanMoveHere(hitbox.x + xSpeed,hitbox.y + ySpeed, hitbox.width, hitbox.height, lvlData)){
-            hitbox.x += xSpeed;
-            hitbox.y += ySpeed;
-            moving = true;
-        }
+        if(InAir){
+            if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)){
+                hitbox.y += airSpeed;
+                airSpeed += gravity;
+                updateXPos(xSpeed); //already checking if can move left/right
+            }else{
+                hitbox.y = EntityNextToRoof(hitbox, airSpeed);
+                if(airSpeed > 0)
+                    resetInAir();
+                else
+                    airSpeed = fallSpeedAfterColission;
+                updateXPos(xSpeed);
+            }
+        }else
+            updateXPos(xSpeed);
 
+        moving = true;
     }
+
+    private void jump() {
+        if(InAir)
+            return;
+        InAir = true;
+        airSpeed = jumpSpeed;
+    }
+
+    private void resetInAir() {
+        InAir = false;
+        airSpeed = 0;
+    }
+
+    private void updateXPos(float xSpeed) {
+        if(CanMoveHere(hitbox.x + xSpeed, hitbox.y, hitbox.width, hitbox.height, lvlData)){
+           hitbox.x += xSpeed;
+        }else {
+            hitbox.x = EntityNextToWall(hitbox, xSpeed);
+        }
+    }
+
 
     private void loadAnimations() {
 
