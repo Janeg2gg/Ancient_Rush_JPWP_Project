@@ -63,6 +63,10 @@ public class Player extends Entity{
         else
             playerAction = IDLE;
 
+        if(InAir){
+            playerAction = JUMP;
+        }
+
         if(startAnimation != playerAction){
             resetAniTick();
         }
@@ -89,6 +93,11 @@ public class Player extends Entity{
             xSpeed -= playerSpeed;
         if(right)
             xSpeed += playerSpeed;
+
+        if(!InAir){
+            if(!IsEntityOnFloor(hitbox, lvlData))
+                InAir = true;
+        }
 
 
         if(InAir){
@@ -142,6 +151,8 @@ public class Player extends Entity{
 
     public void loadLvlData(int [][] lvlData){
         this.lvlData = lvlData;
+        if(!IsEntityOnFloor(hitbox, lvlData))
+            InAir = true;
     }
 
     public void resetBooleans(){
