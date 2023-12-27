@@ -15,11 +15,11 @@ public abstract class Entity {
         
     }
 
-    protected void drawHitbox(Graphics g){
-        //debugging hitbox
-        g.setColor(Color.RED);
-        g.drawRect((int)hitbox.x, (int)hitbox.y, (int)hitbox.width, (int)hitbox.height);
-    }
+//    protected void drawHitbox(Graphics g){
+//        //debugging hitbox
+//        g.setColor(Color.RED);
+//        g.drawRect((int)hitbox.x, (int)hitbox.y, (int)hitbox.width, (int)hitbox.height);
+//    }
 
     protected void inithitbox(float x, float y, float width, float height) {
         hitbox = new Rectangle2D.Float(x, y, width, height);

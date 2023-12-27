@@ -8,7 +8,7 @@ import static utilz.HelpMethods.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static utilz.constants.PlayerConstants.*;
+import static utilz.Constants.PlayerConstants.*;
 
 public class Player extends Entity{
     private BufferedImage[][] animations;
@@ -42,7 +42,8 @@ public class Player extends Entity{
 
     public void render(Graphics g){
         g.drawImage(animations[playerAction][aniIndex],(int)(hitbox.x - xDrawOffset), (int)(hitbox.y - yDrawOffset), width, height ,null);
-        drawHitbox(g);
+        //debugging purposes
+        //drawHitbox(g);
     }
 
     private void updateAnimation() {
