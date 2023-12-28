@@ -14,11 +14,14 @@ public class LoadSave {
     public static final String LEVEL_ATLAS = "outside_sprites.png";
     public static final String LEVEL_ONE_DATA = "level_one_data.png";
     public static final String MENU_BACKGROUND = "menu_background.png";
+    public static final String MENU_BACKGROUND_IMAGE = "menu_background_image.png";
     public static final String MENU_BUTTONS = "menu_buttons.png";
     public static final String PAUSE_MENU = "pause_menu.png";
     public static final String PAUSE_BUTTONS = "pause_buttons.png";
     public static final String PAUSE_SOUND = "sound_button.png";
     public static final String PAUSE_VOLUME = "volume_buttons.png";
+    public static final String GAME_BACKGROUND_IMAGE = "game_background.png";
+
     public static BufferedImage GetSpriteAtlas(String fileName){
         BufferedImage img = null;
 

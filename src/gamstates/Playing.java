@@ -4,10 +4,12 @@ import Levels.LevelHandler;
 import Main.Game;
 import entieties.Player;
 import ui.PauseOverlay;
+import utilz.LoadSave;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 public class Playing extends State implements Statemethods{
     private Player player1;
@@ -15,9 +17,13 @@ public class Playing extends State implements Statemethods{
     private PauseOverlay pauseOverlay;
     private boolean paused = false;
 
+    private BufferedImage backgroundImg;
+
     public Playing(Game game) {
         super(game);
         initClasses();
+
+        backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.GAME_BACKGROUND_IMAGE);
     }
 
     private void initClasses() {
@@ -52,10 +58,16 @@ public class Playing extends State implements Statemethods{
 
     @Override
     public void draw(Graphics g) {
+        g.drawImage(backgroundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+
         levelHandler.draw(g);
         player1.render(g);
-        if(paused)
+        if(paused){
+            g.setColor(new Color(0,0,0,150));
+            g.fillRect(0,0,Game.GAME_WIDTH,Game.GAME_HEIGHT);
             pauseOverlay.draw(g);
+        }
+
     }
 
     public void mouseDragged(MouseEvent e){
